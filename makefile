@@ -1,5 +1,5 @@
 TARGET = csocksd
-SRC = main.c log.c ev.c
+SRC = main.c log.c ev.c ringbuf.c
 
 CFLAGS += -Wall -Wextra -Werror
 CFLAGS += -std=c23 -D_XOPEN_SOURCE=600 -D_OPEN_SOURCE

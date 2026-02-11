@@ -34,6 +34,8 @@ void ev_quit (ev_loop *loop);
 
 ev_data *ev_register_io (ev_loop *loop, int fd, uint32_t events, ev_callback callback, void *data);
 ev_data *ev_register_signal (ev_loop *loop, uint32_t signo, ev_callback callback, void *data);
+
+int ev_modify_io (ev_data *ev, uint32_t events);
 int ev_remove (ev_data *ev);
 
 #endif

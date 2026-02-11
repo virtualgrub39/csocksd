@@ -12,7 +12,9 @@
 int
 ev_remove (ev_data *ev)
 {
-    return epoll_ctl (ev->loop->epfd, EPOLL_CTL_DEL, ev->fd, NULL);
+    int e = epoll_ctl (ev->loop->epfd, EPOLL_CTL_DEL, ev->fd, NULL);
+    free (ev);
+    return e;
 }
 
 int
@@ -138,4 +140,15 @@ ev_register_io (ev_loop *loop, int fd, uint32_t events, ev_callback callback, vo
     }
 
     return ev;
+}
+
+int
+ev_modify_io (ev_data *ev, uint32_t events)
+{
+    struct epoll_event epev = {
+        .events = events,
+        .data.ptr = ev,
+    };
+
+    return epoll_ctl (ev->loop->epfd, EPOLL_CTL_MOD, ev->fd, &epev);
 }
