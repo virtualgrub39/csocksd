@@ -55,14 +55,14 @@ tcp_listener_init (ev_loop *loop, uint16_t port, int backlog, tcp_callback on_co
     if (!loop)
     {
         errno = EINVAL;
-        return false;
+        return NULL;
     }
 
     int fd = socket (AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (fd < 0)
     {
         log_errno ("failed to initialize socket");
-        return false;
+        return NULL;
     }
 
     struct sockaddr_in bindaddr = { 0 };
@@ -77,21 +77,21 @@ tcp_listener_init (ev_loop *loop, uint16_t port, int backlog, tcp_callback on_co
     {
         log_errno ("failed to bind socket to port %hu", port);
         close (fd);
-        return false;
+        return NULL;
     }
 
     if (make_nonblocking (fd) < 0)
     {
         log_errno ("failed to modify socket");
         close (fd);
-        return false;
+        return NULL;
     }
 
     if (listen (fd, backlog) < 0)
     {
         log_errno ("failed to listen on socket");
         close (fd);
-        return false;
+        return NULL;
     }
 
     tcp_listener *listener = malloc (sizeof *listener);
@@ -103,7 +103,7 @@ tcp_listener_init (ev_loop *loop, uint16_t port, int backlog, tcp_callback on_co
         log_errno ("failed to register TCP listener in event loop");
         free (listener);
         close (fd);
-        return false;
+        return NULL;
     }
 
     listener->ev_handle = ev;
