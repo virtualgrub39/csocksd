@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <sys/epoll.h>
 
 typedef struct
 {
@@ -36,6 +37,10 @@ ev_data *ev_register_io (ev_loop *loop, int fd, uint32_t events, ev_callback cal
 ev_data *ev_register_signal (ev_loop *loop, uint32_t signo, ev_callback callback, void *data);
 
 int ev_modify_io (ev_data *ev, uint32_t events);
+#define ev_set_r(ev) ev_modify_io (ev, EPOLLIN)
+#define ev_set_w(ev) ev_modify_io (ev, EPOLLOUT)
+#define ev_set_rw(ev) ev_modify_io (ev, EPOLLIN | EPOLLOUT)
+
 int ev_remove (ev_data *ev);
 
 #endif

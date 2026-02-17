@@ -1,19 +1,22 @@
 TARGET = csocksd
-SRC = main.c log.c ev.c ringbuf.c
+SRC = main.c log.c ev.c ringbuf.c tcp-listener.c session.c csocks.c protocol.c
+SRCDIR = ./source
+
+SRC := $(addprefix $(SRCDIR)/,$(SRC))
 
 CFLAGS += -Wall -Wextra -Werror
-CFLAGS += -std=c23 -D_XOPEN_SOURCE=600 -D_OPEN_SOURCE
+CFLAGS += -std=c23 -D_GNU_SOURCE
 CFLAGS += -ggdb -g
-
+CFLAGS += -Iinclude
 
 CFLAGS += -Wno-unused-parameter
 CFLAGS += -Wno-int-to-pointer-cast
 CFLAGS += -Wno-pointer-to-int-cast
 CFLAGS += -Wno-unused-variable
 
-OBJ = $(SRC:.c=.o)
+OBJ = $(notdir $(SRC:.c=.o))
 
-%.o: %.c
+%.o: $(SRCDIR)/%.c
 	$(CC) -c -o $@ $(CFLAGS) $<
 
 $(TARGET): $(OBJ)

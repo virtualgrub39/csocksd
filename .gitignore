@@ -1,3 +1,5 @@
 *.o
 csocksd
 .cache
+test*
+compile_commands.json
